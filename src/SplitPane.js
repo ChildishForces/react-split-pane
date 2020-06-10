@@ -31,7 +31,7 @@ function getDefaultSize(defaultSize, minSize, maxSize, draggedSize) {
 }
 
 function removeNullChildren(children) {
-  return React.Children.toArray(children).filter(c => c);
+  return React.Children.toArray(children).filter((c) => c);
 }
 class SplitPane extends React.Component {
   constructor(props) {
@@ -303,7 +303,7 @@ class SplitPane extends React.Component {
     return (
       <div
         className={classes.join(' ')}
-        ref={node => {
+        ref={(node) => {
           this.splitPane = node;
         }}
         style={style}
@@ -311,39 +311,45 @@ class SplitPane extends React.Component {
         <Pane
           className={pane1Classes}
           key="pane1"
-          eleRef={node => {
+          eleRef={(node) => {
             this.pane1 = node;
           }}
           size={pane1Size}
           split={split}
-          style={pane1Style}
+          style={
+            notNullChildren[1] ? pane1Style : { ...pane1Style, width: '100%' }
+          }
         >
           {notNullChildren[0]}
         </Pane>
-        <Resizer
-          className={disabledClass}
-          onClick={onResizerClick}
-          onDoubleClick={onResizerDoubleClick}
-          onMouseDown={this.onMouseDown}
-          onTouchStart={this.onTouchStart}
-          onTouchEnd={this.onMouseUp}
-          key="resizer"
-          resizerClassName={resizerClassNamesIncludingDefault}
-          split={split}
-          style={resizerStyle || {}}
-        />
-        <Pane
-          className={pane2Classes}
-          key="pane2"
-          eleRef={node => {
-            this.pane2 = node;
-          }}
-          size={pane2Size}
-          split={split}
-          style={pane2Style}
-        >
-          {notNullChildren[1]}
-        </Pane>
+        {Boolean(notNullChildren[1]) && (
+          <React.Fragment>
+            <Resizer
+              className={disabledClass}
+              onClick={onResizerClick}
+              onDoubleClick={onResizerDoubleClick}
+              onMouseDown={this.onMouseDown}
+              onTouchStart={this.onTouchStart}
+              onTouchEnd={this.onMouseUp}
+              key="resizer"
+              resizerClassName={resizerClassNamesIncludingDefault}
+              split={split}
+              style={resizerStyle || {}}
+            />
+            <Pane
+              className={pane2Classes}
+              key="pane2"
+              eleRef={(node) => {
+                this.pane2 = node;
+              }}
+              size={pane2Size}
+              split={split}
+              style={pane2Style}
+            >
+              {notNullChildren[1]}
+            </Pane>
+          </React.Fragment>
+        )}
       </div>
     );
   }
